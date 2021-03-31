@@ -1,7 +1,30 @@
-let playing = {};   // 현재 연주중인 키 저장
+const playedNotes = [
+];
+// 각 키를 언제 눌러서 언제 뗐는지 기록하고, 그 객체를 데이터로 가져오면 그대로 키를 입력? 음악을 재생할 수 있도록 만들고싶다.
+// record button
 
-let oscillatorNodes = {}; // key: keyCode, value: oscillator instance
-let gainNodes = {}; // key: keyCode, value: gain instance
+// keyCode : start time, end time
+// for문으로 배열에 있는 모든 객체를 각각 비동기적으로 실행시키면
+// start time에 oscilliator start하고, (end time - start time) wait한 다음 stop하면 될것같다.
+
+// 찾아야할 부분 
+// 1. javascript currentTime - startTime
+// 2. 절대시각을 상대시간으로 변환하는
+/*
+for (let index = 0; index < playedNotes.length; index++) {
+  const element = playedNotes[index];
+  
+}
+  '90':[(00:00,00:02), (00:04,00:08)],
+  '88':[(00:01,00:01), (00:03,00:05)]
+*/
+// ----------------------- //
+
+// const를 써도, 객체 자체를 바꿀순없지만 객체 내부의 데이터를 변경할 수 있다.
+const playing = {};   // 현재 연주중인 키 저장
+
+const oscillatorNodes = {}; // key: keyCode, value: oscillator instance
+const gainNodes = {}; // key: keyCode, value: gain instance
 let pedal = 1; // pedal 밟는 효과. 지속시간
 let volume = 0.3; // volume
 let oscillatorType = 'square'; // square, triangle, sawtooth
@@ -30,7 +53,6 @@ const audioCtx = new AudioContext();
 
 window.addEventListener('keydown', (event) => {
   console.log("keydown > keyCode : "+event.keyCode);
-
   // 속성이 data-key, 값이 event.keyCode인 요소
   let key = document.querySelector(`[data-key='${event.keyCode}']`);
 
@@ -39,6 +61,7 @@ window.addEventListener('keydown', (event) => {
     return;
   }
 
+  // 키 입력 성공시
   playing[event.keyCode] = true;
 
   // Oscillator. 전기 진동을 일으키는 장치 생성
@@ -62,8 +85,8 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('keyup', (event) => {
   console.log("keyup > keyCode : "+event.keyCode);
-
-
+  
+  // key up 성공 시. 성공메커니즘은 위에 추가
   o = oscillatorNodes[event.keyCode];
   g = gainNodes[event.keyCode];
   // 서서히 소리가 끊기는 효과
